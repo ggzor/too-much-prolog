@@ -1,9 +1,9 @@
-from dataclasses import dataclass
-from typing import cast
-from functools import reduce
-import operator
 import itertools
+import operator
 import re
+from dataclasses import dataclass
+from functools import reduce
+from typing import cast
 
 
 @dataclass(frozen=True, order=True)

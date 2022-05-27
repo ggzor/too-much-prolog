@@ -1,5 +1,6 @@
 import pytest
-from prolog import parse, unify, Var, Term
+
+from prolog import Term, Var, parse, unify
 
 SubstitutionsList = list[tuple[Var, Term]] | None
 
