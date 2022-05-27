@@ -81,12 +81,11 @@ TRICKY_CASES = [
         "X = Y.",
         "X = Y.",
     ),
-    # FIXME: The answer is correct, but not the expected
-    # (
-    #     "No terms, but transitive.",
-    #     "X = Y. Y = Z.",
-    #     "X = Y. Y = Z.",
-    # ),
+    (
+        "No terms, but transitive.",
+        "X = Y. Y = Z.",
+        "X = Z. Y = Z.",
+    ),
 ]
 
 
@@ -132,4 +131,6 @@ def test_unification(input_str: str, expected_str: str | None):
                 pytest.fail("Expected outputs must have only vars on its left")
         expected.sort()
 
+    print(result)
+    print(expected)
     assert result == expected
