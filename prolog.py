@@ -1,6 +1,7 @@
 import itertools
 import operator
 import re
+from collections import deque
 from dataclasses import dataclass
 from functools import reduce
 from typing import cast
@@ -61,11 +62,12 @@ class Equation:
 Substitutions = dict[Var, Term]
 
 
-def unify(equations: list[Equation]) -> dict[Var, Term] | None:
+def unify(initial: list[Equation]) -> dict[Var, Term] | None:
     subst: dict[Var, Term] = {}
+    equations = deque(initial)
 
     while equations:
-        item = equations.pop()
+        item = equations.popleft()
         match (item.lhs, item.rhs):
             # pylint: disable=used-before-assignment
             # false positive, no match support in pylint yet
