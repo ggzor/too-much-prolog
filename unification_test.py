@@ -72,11 +72,6 @@ WIKI_CASES = [
 
 TRICKY_CASES = [
     (
-        "Order of evaluation should not matter",
-        "X = f(a, b). g(X, y) = g(Z, y).",
-        "X = f(a, b). Z = f(a, b).",
-    ),
-    (
         "No terms",
         "X = Y.",
         "X = Y.",
