@@ -55,10 +55,31 @@ TRICKY_CASES = [
         "X = f(a, b). g(X, y) = g(Z, y).",
         "X = f(a, b). Z = f(a, b).",
     ),
+    (
+        "No terms",
+        "X = Y.",
+        "X = Y.",
+    ),
+    (
+        "No terms, but transitive.",
+        "X = Y. Y = Z.",
+        "X = Y. Y = Z.",
+    ),
 ]
 
 
-CASES = BASE_CASES + TRICKY_CASES
+SAMPLE_CASES = [
+    (
+        "cons(X, cons(X, nil)) = cons(2, Y).",
+        "X = 2. Y = cons(2, nil).",
+    ),
+]
+
+CASES = (
+    BASE_CASES
+    + TRICKY_CASES
+    + [(f"Sample case {i}", x, y) for i, (x, y) in enumerate(SAMPLE_CASES, start=1)]
+)
 
 test_cases = [pytest.param(inp, out, id=name) for name, inp, out in CASES]
 
