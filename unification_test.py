@@ -49,7 +49,16 @@ BASE_CASES = [
 ]
 
 
-CASES = BASE_CASES
+TRICKY_CASES = [
+    (
+        "Order of evaluation should not matter",
+        "X = f(a, b). g(X, y) = g(Z, y).",
+        "X = f(a, b). Z = f(a, b).",
+    ),
+]
+
+
+CASES = BASE_CASES + TRICKY_CASES
 
 test_cases = [pytest.param(inp, out, id=name) for name, inp, out in CASES]
 
