@@ -71,7 +71,7 @@ def unify(equations: list[Equation]) -> dict[Var, Term] | None:
                 pass
             case (Func(n1, t1), Func(n2, t2)):
                 # decompose
-                if n1 == n2:
+                if n1 == n2 and len(t1) == len(t2):
                     equations.extend(map(Equation, t1, t2))
                 # conflict
                 else:
@@ -84,6 +84,7 @@ def unify(equations: list[Equation]) -> dict[Var, Term] | None:
                 subst[x] = t
                 for item in itertools.chain(equations, subst.values()):
                     item.replace(subst)
+            # check
             case (Var(), Func()):
                 return None
 
@@ -183,18 +184,5 @@ class Parser:
         return result
 
 
-def solve(input: str):
-    return unify(Parser(list(lex(INPUT1))).parse())
-
-
-if __name__ == "__main__":
-    INPUT1 = """
-    cons(X, cons(X, nil)) = cons(2, Y).
-    """
-
-    result = solve(INPUT1)
-    if result is None:
-        print("No solution was found")
-    else:
-        for k, v in sorted(list(result.items())):
-            print(Equation(k, v))
+def parse(input: str):
+    return Parser(list(lex(input))).parse()
