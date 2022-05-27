@@ -29,6 +29,8 @@ class Func:
         return reduce(operator.or_, map(lambda x: x.free_vars(), self.terms), set())
 
     def replace(self, subst: "Substitutions"):
+        # pylint: disable=consider-using-enumerate
+        # list will be mutated
         for i in range(len(self.terms)):
             self.terms[i] = self.terms[i].replace(subst)
         return self
@@ -36,8 +38,7 @@ class Func:
     def __str__(self):
         if self.terms:
             return f"{self.name}({', '.join(map(str, self.terms))})"
-        else:
-            return self.name
+        return self.name
 
 
 Term = Var | Func
@@ -66,6 +67,8 @@ def unify(equations: list[Equation]) -> dict[Var, Term] | None:
     while equations:
         item = equations.pop()
         match (item.lhs, item.rhs):
+            # pylint: disable=used-before-assignment
+            # false positive, no match support in pylint yet
             # delete
             case (t1, t2) if t1 == t2:
                 pass
@@ -91,11 +94,10 @@ def unify(equations: list[Equation]) -> dict[Var, Term] | None:
     return subst
 
 
-# Lexing and parsing
+TOKEN_RE = re.compile(r"\s*((?:\w|\d|[_])+)|([\.\(\)=,])")
 
 
 def lex(s: str):
-    TOKEN_RE = re.compile(r"\s*((?:\w|\d|[_])+)|([\.\(\)=,])")
     for ident, op in TOKEN_RE.findall(s):
         if ident:
             if ident.isupper():
@@ -123,8 +125,7 @@ class Parser:
     def current(self):
         if self.eof:
             return EOF
-        else:
-            return self.tokens[self.cursor]
+        return self.tokens[self.cursor]
 
     @property
     def previous(self):
@@ -165,10 +166,10 @@ class Parser:
     def term(self) -> Term:
         if self.match("ident"):
             return self.functor()
-        elif self.match("var"):
+        if self.match("var"):
             return Var(cast(str, self.previous[1]))
-        else:
-            raise ParseError
+
+        raise ParseError
 
     def statement(self):
         lhs = self.term()
@@ -184,5 +185,5 @@ class Parser:
         return result
 
 
-def parse(input: str):
-    return Parser(list(lex(input))).parse()
+def parse(inp: str):
+    return Parser(list(lex(inp))).parse()
