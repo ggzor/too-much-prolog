@@ -1,4 +1,3 @@
-import itertools
 import operator
 import re
 from collections import deque
@@ -71,6 +70,7 @@ def unify(initial: list[Equation]) -> dict[Var, Term] | None:
         match (item.lhs, item.rhs):
             # pylint: disable=used-before-assignment
             # false positive, no match support in pylint yet
+
             # delete
             case (t1, t2) if t1 == t2:
                 pass
@@ -87,8 +87,13 @@ def unify(initial: list[Equation]) -> dict[Var, Term] | None:
             # eliminate
             case (Var() as x, t) if not x in t.free_vars():
                 subst[x] = t
-                for item in itertools.chain(equations, subst.values()):
+                for item in equations:
                     item.replace(subst)
+                # pylint: disable=consider-iterating-dictionary
+                # It's safe to modify the dictionary while it's being iterated
+                # as long as no entries are added or removed
+                for k in subst.keys():
+                    subst[k] = subst[k].replace(subst)
             # check
             case (Var(), Func()):
                 return None
